@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Office & Beyond ☕✨ | لأجدع وأشطر بيست فريند</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Readex Pro & Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Readex+Pro:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <style>
+      * {
+        font-family: "Readex Pro", "Cairo", sans-serif;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background: #090d16;
+        color: #f1f5f9;
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+
+      /* Ambient glow elements */
+      .ambient-glow {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(100px);
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.45;
+        animation: pulseGlow 12s ease-in-out infinite alternate;
+      }
+
+      .glow-1 {
+        width: 450px;
+        height: 450px;
+        background: radial-gradient(
+          circle,
+          #f59e0b 0%,
+          rgba(245, 158, 11, 0) 70%
+        );
+        top: -100px;
+        right: -80px;
+      }
+
+      .glow-2 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          #f43f5e 0%,
+          rgba(244, 63, 94, 0) 70%
+        );
+        bottom: -120px;
+        left: -100px;
+        animation-delay: -5s;
+      }
+
+      @keyframes pulseGlow {
+        0% {
+          transform: scale(0.9) translate(0, 0);
+          opacity: 0.35;
+        }
+        100% {
+          transform: scale(1.15) translate(25px, 25px);
+          opacity: 0.6;
+        }
+      }
+
+      /* Glassmorphism panel */
+      .glass-card {
+        background: rgba(18, 24, 38, 0.78);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow:
+          0 25px 60px -15px rgba(0, 0, 0, 0.7),
+          0 0 30px rgba(245, 158, 11, 0.08);
+      }
+
+      /* Polaroid photo styling */
+      .polaroid {
+        background: #ffffff;
+        padding: 10px 10px 16px 10px;
+        box-shadow:
+          0 15px 30px rgba(0, 0, 0, 0.45),
+          0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+      }
+
+      .polaroid:hover {
+        transform: translateY(-8px) scale(1.04) rotate(0deg) !important;
+        box-shadow:
+          0 22px 40px rgba(245, 158, 11, 0.25),
+          0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 20;
+      }
+
+      .tape {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 65px;
+        height: 22px;
+        background-color: rgba(253, 230, 138, 0.65);
+        border-left: 2px dashed rgba(217, 119, 6, 0.2);
+        border-right: 2px dashed rgba(217, 119, 6, 0.2);
+        backdrop-filter: blur(2px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+      }
+
+      /* Option selection ripple glow */
+      .quiz-option {
+        transition: all 0.25s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .quiz-option:hover:not(:disabled) {
+        transform: translateY(-2px);
+        border-color: rgba(245, 158, 11, 0.6);
+        background: rgba(30, 41, 59, 0.9);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.15);
+      }
+
+      .quiz-option:active:not(:disabled) {
+        transform: scale(0.98);
+      }
+
+      /* Waveform visualizer bars */
+      .wave-bar {
+        transition:
+          height 0.15s ease,
+          background-color 0.2s;
+        border-radius: 4px;
+      }
+
+      /* Custom subtle scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #090d16;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 999px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #f59e0b;
+      }
+
+      .shimmer-text {
+        background: linear-gradient(90deg, #f59e0b, #fbbf24, #f43f5e, #f59e0b);
+        background-size: 200% auto;
+        color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: shimmer 4s linear infinite;
+      }
+
+      @keyframes shimmer {
+        to {
+          background-position: 200% center;
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="relative flex flex-col items-center justify-center p-3 sm:p-6 min-h-screen"
+  >
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <canvas
+      id="starsCanvas"
+      class="fixed inset-0 pointer-events-none z-0"
+    ></canvas>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-xl relative z-10 my-auto py-4">
+      <div
+        class="glass-card rounded-3xl p-5 sm:p-9 relative overflow-hidden transition-all duration-500"
+      >
+        <!-- Top Subtle Status Header -->
+        <header
+          class="flex items-center justify-between pb-4 mb-4 border-b border-slate-700/50 text-xs text-slate-400"
+        >
+          <div class="flex items-center gap-2">
+            <span
+              class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"
+            ></span>
+            <span class="font-medium text-slate-300"
+              >سجل الصداقة المعتمد 📂</span
+            >
+          </div>
+          <div
+            class="flex items-center gap-1.5 bg-slate-800/80 px-2.5 py-1 rounded-full border border-slate-700"
+          >
+            <span> كوكو</span>
+            <span class="text-amber-400 font-bold">24/7</span>
+          </div>
+        </header>
+
+        <!-- Welcome Screen -->
+        <section id="welcomeScreen" class="text-center space-y-6">
+          <div
+            class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-amber-400/10 border border-amber-400/30 text-amber-400 text-4xl shadow-inner shadow-amber-400/20 transform hover:rotate-6 transition-transform"
+          >
+            ☕
+          </div>
+
+          <div class="space-y-2">
+            <h1 class="text-2xl sm:text-3xl font-black shimmer-text">
+              The Office & Beyond Quiz
+            </h1>
+            <p class="text-xs sm:text-sm text-amber-300/80 font-medium">
+              (من زمالة الشغل القديم.. لأجدع وأحن بيست فريند )
+            </p>
+          </div>
+
+          <div
+            class="bg-slate-800/60 p-4 sm:p-5 rounded-2xl border border-slate-700/60 text-right space-y-2.5"
+          >
+            <p class="text-slate-200 text-sm sm:text-base leading-relaxed">
+              يا هلا ب احلى HR والبيست فريند ! طبعاً مافيش مناسبة معينة، بس بما
+              إنك صديقى الصدوق وصاحبتي الجدعة، قولت أعملك المفاجأة الرايقة دي
+              توثيقاً لرحلتنا من أيام خنقة وضغط الشغل! ✨
+            </p>
+            <div
+              class="flex items-center gap-2 text-xs text-slate-400 pt-1 border-t border-slate-700/40"
+            >
+              <span>⚡ كويز سريع مكون من 4 أسئلة عن عاداتنا وخفة دمنا</span>
+            </div>
+          </div>
+
+          <button
+            id="startQuizBtn"
+            class="w-full py-4 px-6 bg-gradient-to-r from-amber-400 via-amber-500 to-rose-500 hover:from-amber-300 hover:to-rose-400 text-slate-950 font-black rounded-2xl transition duration-300 shadow-xl shadow-amber-500/25 active:scale-98 flex items-center justify-center gap-3 text-base sm:text-lg group"
+          >
+            <span>يلا بينا نكتشف النتيجة!</span>
+            <span
+              class="transform group-hover:-translate-x-1 transition-transform"
+              >🚀</span
+            >
+          </button>
+        </section>
+
+        <!-- Quiz Screen -->
+        <section id="quizScreen" class="hidden space-y-6">
+          <div class="space-y-2">
+            <div
+              class="flex justify-between items-center text-xs font-semibold text-slate-300"
+            >
+              <span id="questionCounter">سؤال 1 من 4</span>
+              <span id="progressPercent" class="text-amber-400 font-bold"
+                >25%</span
+              >
+            </div>
+            <div
+              class="h-2 w-full bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-700/60"
+            >
+              <div
+                id="progressBar"
+                class="h-full bg-gradient-to-r from-amber-400 to-rose-400 rounded-full transition-all duration-400 w-1/4"
+              ></div>
+            </div>
+          </div>
+
+          <div class="min-h-[64px] flex items-center">
+            <h2
+              id="questionText"
+              class="text-lg sm:text-xl font-bold text-slate-100 leading-snug"
+            ></h2>
+          </div>
+
+          <div id="optionsContainer" class="space-y-3 pt-1"></div>
+
+          <div
+            id="reactionBox"
+            class="hidden p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-amber-300 text-sm leading-relaxed text-center font-medium animate-bounce-short"
+          ></div>
+        </section>
+
+        <!-- Result Screen -->
+        <section id="resultScreen" class="hidden space-y-6">
+          <div class="text-center space-y-2">
+            <div
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-400/30"
+            >
+              <span>🏆 التقييم النهائي المعتمد</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-100">
+              <span class="text-amber-400">100%</span> أجدع وأشطر بيست فريند! 👑
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-400">
+              بكل جدارة، مفيش حد يقدر ينافس على اللقب ده!
+            </p>
+          </div>
+
+          <!-- Polaroid Photo Gallery -->
+          <div class="space-y-2 pt-2">
+            <div
+              class="flex items-center justify-between text-xs text-slate-400 px-1"
+            >
+              <span>معرض الصور والذكريات الجميلة 📸</span>
+              <span class="text-amber-400/80 text-[11px]"
+                >(اضغطي على الصور للتكبير)</span
+              >
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 py-2">
+              <!-- Polaroid 1 -->
+              <div
+                class="polaroid rounded-lg transform -rotate-3 hover:rotate-0 cursor-pointer"
+                onclick="viewPhoto(1)"
+              >
+                <div class="tape"></div>
+                <div
+                  class="w-full h-44 bg-slate-800 rounded overflow-hidden relative group flex items-center justify-center"
+                >
+                  <img
+                    id="friendPhoto1"
+                    src="photo/dodo.jpg"
+                    alt="Dodo"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onerror="
+                      handleImgFallback(this, [
+                        'photo/dodo.jpeg',
+                        'photo/dodo.png',
+                        'photo/dodo.JPG',
+                      ])
+                    "
+                  />
+                </div>
+                <p class="text-slate-800 text-xs font-bold mt-2 text-center">
+                  أجدع وأشيك كاريزما ✨
+                </p>
+              </div>
+
+              <!-- Polaroid 2 -->
+              <div
+                class="polaroid rounded-lg transform rotate-3 hover:rotate-0 cursor-pointer"
+                onclick="viewPhoto(2)"
+              >
+                <div class="tape"></div>
+                <div
+                  class="w-full h-44 bg-slate-800 rounded overflow-hidden relative group flex items-center justify-center"
+                >
+                  <img
+                    id="friendPhoto2"
+                    src="photo/23.jpg"
+                    alt="Photo 23"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onerror="
+                      handleImgFallback(this, [
+                        'photo/23.jpeg',
+                        'photo/23.png',
+                        'photo/23.JPG',
+                      ])
+                    "
+                  />
+                </div>
+                <p class="text-slate-800 text-xs font-bold mt-2 text-center">
+                  الضحكة اللي بتهون أي شيفت 🤍
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Heartfelt Appreciation Letter -->
+          <div
+            class="bg-slate-800/80 rounded-2xl p-5 border border-slate-700/70 text-right space-y-3 relative overflow-hidden shadow-md"
+          >
+            <div
+              class="flex items-center gap-2 text-amber-400 font-bold text-sm"
+            >
+              <span>💌 رسالة شكر من القلب:</span>
+            </div>
+            <p class="text-slate-200 text-sm leading-relaxed">
+              حابب أقولك كلمة حق من غير مجاملة.. خروجي من الشغل القديم كان ممكن
+              يقطع علاقات كتير، بس معرفتك وصداقتك كانت هي المكسب الحقيقي اللي
+              طلعت بيه ومستمر.
+            </p>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              شكراً عشان إنتي صديقى الصدوق والجدعة اللي دايماً بتسمع وبتنصح
+              وبتفهم، وشكراً عشان حتى لما بننشغل بالروتين بنرجع نتكلم بنفس
+              العفوية والضحكة. ربنا يديم المحبة والجدعنة دايماً يا كوكتى! 🌟
+            </p>
+          </div>
+
+          <!-- Interactive Audio Player -->
+          <div
+            class="bg-[#1f2c34] rounded-2xl p-4 border border-[#2a3942] text-right space-y-3 shadow-lg"
+          >
+            <div
+              class="flex items-center justify-between text-xs text-slate-400 pb-1 border-b border-slate-700/50"
+            >
+              <span
+                class="flex items-center gap-1.5 text-emerald-400 font-semibold"
+              >
+                <span
+                  class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"
+                ></span>
+                الأغنية المفضلة ل دودو 🎵
+              </span>
+              <span id="voiceTime" class="font-mono text-slate-300"
+                >0:00 / 0:00</span
+              >
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button
+                id="playVoiceBtn"
+                class="w-12 h-12 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 flex items-center justify-center text-xl shrink-0 transition shadow-md shadow-emerald-500/30 font-bold"
+                title="تشغيل / إيقاف"
+              >
+                ▶
+              </button>
+              <div
+                id="waveform"
+                class="flex items-center gap-1 flex-1 h-10 px-2 overflow-hidden bg-slate-900/50 rounded-xl cursor-pointer select-none"
+                title="اضغط للتنقل داخل الأغنية"
+              ></div>
+            </div>
+            <p class="text-[11px] text-slate-400">
+              اضغطي تشغيل لسماع الأغنية المفضلة 🎶
+            </p>
+          </div>
+
+          <!-- Audio tag -->
+          <audio id="realAudio" preload="auto"></audio>
+
+          <!-- Action Buttons -->
+          <div class="space-y-3 pt-2">
+            <a
+              id="whatsappShareBtn"
+              href="#"
+              target="_blank"
+              class="w-full py-3.5 px-5 bg-[#25D366] hover:bg-[#20ba5a] text-slate-950 font-bold rounded-2xl transition duration-200 shadow-lg shadow-emerald-600/20 active:scale-98 flex items-center justify-center gap-2 text-sm sm:text-base text-center"
+            >
+              <span>📱 ابعتيلي النتيجة على الواتس</span>
+            </a>
+
+            <button
+              id="restartQuizBtn"
+              class="w-full py-2.5 px-4 text-xs sm:text-sm text-slate-400 hover:text-amber-400 underline underline-offset-8 transition text-center"
+            >
+              🔄 إعادة الكويز من البداية
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <footer
+        class="text-center mt-6 text-xs text-slate-500 flex items-center justify-center gap-2"
+      >
+        <span>صُنع بمزاج عالي وقهوة من زميلك وصديقك الصدوق 💻</span>
+      </footer>
+    </main>
+
+    <!-- Photo Modal for Zoom -->
+    <div
+      id="photoModal"
+      class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"
+    >
+      <div
+        class="max-w-md w-full bg-slate-900 border border-slate-700 p-4 rounded-3xl text-center space-y-4 relative"
+      >
+        <button
+          onclick="closePhotoModal()"
+          class="absolute top-3 left-3 w-8 h-8 rounded-full bg-slate-800 text-slate-300 hover:bg-rose-500 hover:text-white transition flex items-center justify-center text-sm font-bold"
+        >
+          ✕
+        </button>
+        <div
+          class="w-full h-80 rounded-2xl overflow-hidden bg-slate-950 flex items-center justify-center"
+        >
+          <img
+            id="modalImg"
+            src=""
+            alt="Modal Zoom"
+            class="w-full h-full object-contain"
+          />
+        </div>
+        <p id="modalCaption" class="text-sm font-medium text-amber-300"></p>
+      </div>
+    </div>
+
+    <script>
+      /* Image fallback helper */
+      function handleImgFallback(imgElement, fallbacks) {
+        if (!fallbacks || fallbacks.length === 0) return;
+        const nextSrc = fallbacks.shift();
+        imgElement.onerror = () => handleImgFallback(imgElement, fallbacks);
+        imgElement.src = nextSrc;
+      }
+
+      /* Quiz Data */
+      const QUIZ_QUESTIONS = [
+        {
+          question:
+            "مين فينا اللي بيبعت الفويس نوت مدتها كأنها حلقة بودكاست 7 دقايق؟ 😂",
+          options: [
+            "إنتي طبعاً (مفيش منافسة في الرغي)",
+            "أنا (لما بكون محتاج أفضفض ومخنوق)",
+            "إحنا الاتنين بنعمل مسابقات مين أطول فويس!",
+            "بنكتب مسدجات عادية.. بس طولها شبرين",
+          ],
+          reaction:
+            "مش هنقول أسماء بس في حد بيحكي تفاصيل يومه من ساعة ما فتح عينه لحد ما نام! 🎙️❤️",
+        },
+        {
+          question:
+            "أكتر جملة كانت بتتقال في الشغل القديم أول ما نبدأ اليوم؟ ☕",
+          options: [
+            "عايزة أروّح.. هو اليوم مش هيخلص؟",
+            "هنطلب فطار إيه بسرعة قبل الزحمة؟",
+            "قهوة حالا عشان التركيز بالسالب",
+            "يلا نشد حيلنا (كذبة الصباح الشهيرة)",
+          ],
+          reaction:
+            "كنا بنفكر في المرواح والأكل قبل ما نفتح اللابتوبات والمهام أصلاً! 🥞✨",
+        },
+        {
+          question:
+            "مين الطرف اللي بيتأخر في الرد على الواتس ويقول 'معلش كنت مشغولة/نايم'؟ 📱",
+          options: [
+            "إنتي.. وبترجعي تردي بعد 6 ساعات ولا كأن حاجة حصلت",
+            "أنا.. وغصب عني والله بسبب السحلة",
+            "بنتأخر إحنا الاتنين بس بنرجع نفتح ألف موضوع في ثانية",
+            "بنرد في نفس اللحظة عشان مفيش صبر!",
+          ],
+          reaction:
+            "أهم حاجة إن لما بنرد بنمسك الشات ولا كأن في أي وقت عدى! 💬👌",
+        },
+        {
+          question:
+            "لو قررنا نعمل مشروع سوا بعيد عن وجع دماغ الشركات، هيكون إيه؟ 🚀",
+          options: [
+            "عربة قهوة وسناكس ونشغل أغاني رايقة",
+            "بودكاست لتقييم ونقد البشر والشركات",
+            "مكان استجمام للناس الهربانة من الشغل",
+            "مكتب  وإنتي المديرة التنفيذية الصارمة!",
+          ],
+          reaction:
+            "المهم إن أي حاجة فيها راحة بال ورغي وقهوة هننجح فيها باكتساح! 🌟🎉",
+        },
+      ];
+
+      let currentQuestionIndex = 0;
+      let isAnswering = false;
+
+      /* Stars background */
+      const canvas = document.getElementById("starsCanvas");
+      const ctx = canvas.getContext("2d");
+      let stars = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      for (let i = 0; i < Math.floor(window.innerWidth / 18); i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.5 + 0.5,
+          alpha: Math.random() * 0.7 + 0.2,
+          speed: Math.random() * 0.3 + 0.1,
+        });
+      }
+
+      function drawStars() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach((star) => {
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(251, 191, 36, ${star.alpha})`;
+          ctx.fill();
+          star.y -= star.speed;
+          if (star.y < 0) {
+            star.y = canvas.height;
+            star.x = Math.random() * canvas.width;
+          }
+        });
+        requestAnimationFrame(drawStars);
+      }
+      drawStars();
+
+      /* Elements */
+      const welcomeScreen = document.getElementById("welcomeScreen");
+      const quizScreen = document.getElementById("quizScreen");
+      const resultScreen = document.getElementById("resultScreen");
+
+      const startQuizBtn = document.getElementById("startQuizBtn");
+      const restartQuizBtn = document.getElementById("restartQuizBtn");
+
+      const questionCounter = document.getElementById("questionCounter");
+      const progressPercent = document.getElementById("progressPercent");
+      const progressBar = document.getElementById("progressBar");
+      const questionText = document.getElementById("questionText");
+      const optionsContainer = document.getElementById("optionsContainer");
+      const reactionBox = document.getElementById("reactionBox");
+      const whatsappShareBtn = document.getElementById("whatsappShareBtn");
+
+      const defaultWhatsAppText = encodeURIComponent(
+        "أنا حليت الكويز بتاعك كله وطلعت أجدع وأشطر كوكو  بنسبة 100%!         😂❤️✨",
+      );
+      whatsappShareBtn.href = `https://wa.me/?text=${defaultWhatsAppText}`;
+
+      startQuizBtn.addEventListener("click", () => {
+        welcomeScreen.classList.add("hidden");
+        quizScreen.classList.remove("hidden");
+        currentQuestionIndex = 0;
+        loadQuestion(0);
+      });
+
+      function loadQuestion(index) {
+        isAnswering = false;
+        reactionBox.classList.add("hidden");
+        reactionBox.textContent = "";
+
+        const q = QUIZ_QUESTIONS[index];
+        const currentNum = index + 1;
+        const total = QUIZ_QUESTIONS.length;
+        const pct = Math.round((currentNum / total) * 100);
+
+        questionCounter.textContent = `سؤال ${currentNum} من ${total}`;
+        progressPercent.textContent = `${pct}%`;
+        progressBar.style.width = `${pct}%`;
+
+        questionText.textContent = q.question;
+        optionsContainer.innerHTML = "";
+
+        q.options.forEach((optText, optIdx) => {
+          const btn = document.createElement("button");
+          btn.className = `quiz-option w-full text-right p-3.5 sm:p-4 rounded-2xl bg-slate-800/90 border border-slate-700/80 text-slate-200 font-medium text-sm sm:text-base flex items-center justify-between group`;
+          btn.innerHTML = `
+            <span>${optText}</span>
+            <span class="w-6 h-6 rounded-full bg-slate-700/50 flex items-center justify-center text-xs text-amber-400 group-hover:bg-amber-400 group-hover:text-slate-950 transition-colors">
+              ${["أ", "ب", "ج", "د"][optIdx]}
+            </span>
+          `;
+          btn.addEventListener("click", () =>
+            handleOptionSelection(btn, q.reaction),
+          );
+          optionsContainer.appendChild(btn);
+        });
+      }
+
+      function handleOptionSelection(selectedButton, reactionText) {
+        if (isAnswering) return;
+        isAnswering = true;
+
+        selectedButton.classList.remove(
+          "bg-slate-800/90",
+          "border-slate-700/80",
+        );
+        selectedButton.classList.add(
+          "bg-amber-400/20",
+          "border-amber-400",
+          "text-amber-200",
+        );
+
+        const buttons = optionsContainer.querySelectorAll("button");
+        buttons.forEach((b) => (b.disabled = true));
+
+        if (typeof confetti === "function") {
+          confetti({
+            particleCount: 25,
+            spread: 45,
+            origin: { y: 0.75 },
+            colors: ["#f59e0b", "#f43f5e", "#ffffff"],
+          });
+        }
+
+        reactionBox.textContent = reactionText;
+        reactionBox.classList.remove("hidden");
+
+        setTimeout(() => {
+          if (currentQuestionIndex + 1 < QUIZ_QUESTIONS.length) {
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+          } else {
+            showFinalResults();
+          }
+        }, 1500);
+      }
+
+      function showFinalResults() {
+        quizScreen.classList.add("hidden");
+        resultScreen.classList.remove("hidden");
+
+        if (typeof confetti === "function") {
+          confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+        }
+      }
+
+      restartQuizBtn.addEventListener("click", () => {
+        resultScreen.classList.add("hidden");
+        welcomeScreen.classList.remove("hidden");
+        if (realAudio) {
+          realAudio.pause();
+          playVoiceBtn.textContent = "▶";
+          playVoiceBtn.classList.remove("bg-amber-400");
+          playVoiceBtn.classList.add("bg-emerald-500");
+        }
+      });
+
+      /* =========================================================================
+         Audio Player Setup
+         ========================================================================= */
+      const realAudio = document.getElementById("realAudio");
+      const playVoiceBtn = document.getElementById("playVoiceBtn");
+      const voiceTime = document.getElementById("voiceTime");
+      const waveform = document.getElementById("waveform");
+
+      // ربط مسار ملف الأغنية المحدد
+      realAudio.src = "photo/record.mpeg";
+      realAudio.load();
+
+      const waveBars = [];
+      const totalBars = 32;
+
+      waveform.innerHTML = "";
+      for (let i = 0; i < totalBars; i++) {
+        const bar = document.createElement("div");
+        bar.className = "wave-bar w-1.5 bg-slate-600 rounded-sm";
+        const h = Math.floor(Math.sin(i / 3) * 12 + 16);
+        bar.style.height = `${h}px`;
+        waveform.appendChild(bar);
+        waveBars.push(bar);
+      }
+
+      function formatTime(sec) {
+        if (!sec || isNaN(sec)) return "0:00";
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return `${m}:${s < 10 ? "0" : ""}${s}`;
+      }
+
+      realAudio.addEventListener("loadedmetadata", () => {
+        voiceTime.textContent = `0:00 / ${formatTime(realAudio.duration)}`;
+      });
+
+      playVoiceBtn.addEventListener("click", () => {
+        if (realAudio.paused) {
+          realAudio
+            .play()
+            .then(() => {
+              playVoiceBtn.textContent = "⏸";
+              playVoiceBtn.classList.add("bg-amber-400");
+              playVoiceBtn.classList.remove("bg-emerald-500");
+            })
+            .catch((err) => {
+              console.error("Audio playback error:", err);
+            });
+        } else {
+          realAudio.pause();
+          playVoiceBtn.textContent = "▶";
+          playVoiceBtn.classList.remove("bg-amber-400");
+          playVoiceBtn.classList.add("bg-emerald-500");
+        }
+      });
+
+      realAudio.addEventListener("timeupdate", () => {
+        voiceTime.textContent = `${formatTime(realAudio.currentTime)} / ${formatTime(realAudio.duration)}`;
+        const progress = realAudio.currentTime / realAudio.duration || 0;
+        const activeCount = Math.floor(progress * totalBars);
+
+        waveBars.forEach((bar, idx) => {
+          if (idx <= activeCount) {
+            bar.classList.add("bg-emerald-400");
+            bar.classList.remove("bg-slate-600");
+            if (!realAudio.paused) {
+              bar.style.height = `${Math.floor(Math.random() * 22 + 8)}px`;
+            }
+          } else {
+            bar.classList.remove("bg-emerald-400");
+            bar.classList.add("bg-slate-600");
+          }
+        });
+      });
+
+      realAudio.addEventListener("ended", () => {
+        playVoiceBtn.textContent = "▶";
+        playVoiceBtn.classList.remove("bg-amber-400");
+        playVoiceBtn.classList.add("bg-emerald-500");
+        waveBars.forEach((b) => {
+          b.classList.remove("bg-emerald-400");
+          b.classList.add("bg-slate-600");
+        });
+      });
+
+      waveform.addEventListener("click", (e) => {
+        if (!realAudio.duration) return;
+        const rect = waveform.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+        realAudio.currentTime = ratio * realAudio.duration;
+      });
+
+      /* Modal View */
+      const photoModal = document.getElementById("photoModal");
+      const modalImg = document.getElementById("modalImg");
+      const modalCaption = document.getElementById("modalCaption");
+
+      window.viewPhoto = function (id) {
+        if (id === 1) {
+          modalImg.src = document.getElementById("friendPhoto1").src;
+          modalCaption.textContent = "أجدع وأشيك كاريزما.. صديقى الصدوق ✨";
+        } else {
+          modalImg.src = document.getElementById("friendPhoto2").src;
+          modalCaption.textContent =
+            "الضحكة اللي بتهون أي شيفت وتفاصيل يوم الشغل 🤍";
+        }
+        photoModal.classList.remove("hidden");
+      };
+
+      window.closePhotoModal = function () {
+        photoModal.classList.add("hidden");
+      };
+
+      photoModal.addEventListener("click", (e) => {
+        if (e.target === photoModal) closePhotoModal();
+      });
+    </script>
+  </body>
+</html>
